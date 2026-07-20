@@ -9,14 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Owner } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
-
-const OWNER_LABELS: Record<"ALL" | Owner, string> = {
-  ALL: "Everyone",
-  JAVIER: "Javier",
-  ANDY: "Andy",
-};
 
 export type SortOption = "dueDate" | "importance";
 
@@ -26,15 +19,15 @@ const SORT_ITEMS = [
 ];
 
 export function FiltersBar({
-  ownerFilter,
-  onOwnerFilterChange,
+  showEveryone,
+  onShowEveryoneChange,
   showCompleted,
   onShowCompletedChange,
   sort,
   onSortChange,
 }: {
-  ownerFilter: "ALL" | Owner;
-  onOwnerFilterChange: (value: "ALL" | Owner) => void;
+  showEveryone: boolean;
+  onShowEveryoneChange: (value: boolean) => void;
   showCompleted: boolean;
   onShowCompletedChange: (value: boolean) => void;
   sort: SortOption;
@@ -43,18 +36,24 @@ export function FiltersBar({
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-muted/30 p-3">
       <div className="flex items-center gap-1">
-        {(Object.keys(OWNER_LABELS) as Array<"ALL" | Owner>).map((owner) => (
-          <Button
-            key={owner}
-            type="button"
-            size="sm"
-            variant={ownerFilter === owner ? "default" : "outline"}
-            className={cn(ownerFilter === owner && "shadow-sm")}
-            onClick={() => onOwnerFilterChange(owner)}
-          >
-            {OWNER_LABELS[owner]}
-          </Button>
-        ))}
+        <Button
+          type="button"
+          size="sm"
+          variant={!showEveryone ? "default" : "outline"}
+          className={cn(!showEveryone && "shadow-sm")}
+          onClick={() => onShowEveryoneChange(false)}
+        >
+          Mine
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant={showEveryone ? "default" : "outline"}
+          className={cn(showEveryone && "shadow-sm")}
+          onClick={() => onShowEveryoneChange(true)}
+        >
+          Everyone
+        </Button>
       </div>
 
       <Select

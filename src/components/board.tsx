@@ -52,7 +52,10 @@ export function Board({
   currentUser: Owner;
   topicOrder: string[];
 }) {
-  const [ownerFilter, setOwnerFilter] = useState<"ALL" | Owner>("ALL");
+  // Defaults to the logged-in profile's own pendings — "Everyone" is an
+  // explicit, session-only opt-in, not something that should stick around
+  // (e.g. survive the theme toggle's page reload) or come back unannounced.
+  const [showEveryone, setShowEveryone] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
   const [sort, setSort] = useState<SortOption>("dueDate");
 
@@ -68,9 +71,9 @@ export function Board({
 
   const visible = useMemo(() => {
     return pendings
-      .filter((p) => ownerFilter === "ALL" || p.owner === ownerFilter)
+      .filter((p) => showEveryone || p.owner === currentUser)
       .filter((p) => showCompleted || !p.completed);
-  }, [pendings, ownerFilter, showCompleted]);
+  }, [pendings, showEveryone, currentUser, showCompleted]);
 
   const groups = useMemo(() => {
     const byTopic = new Map<string, Pending[]>();
@@ -127,8 +130,8 @@ export function Board({
       </div>
 
       <FiltersBar
-        ownerFilter={ownerFilter}
-        onOwnerFilterChange={setOwnerFilter}
+        showEveryone={showEveryone}
+        onShowEveryoneChange={setShowEveryone}
         showCompleted={showCompleted}
         onShowCompletedChange={setShowCompleted}
         sort={sort}

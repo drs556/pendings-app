@@ -1,40 +1,38 @@
 "use client";
 
 import { useTransition } from "react";
-import { setCurrentUser } from "@/app/actions";
+import { LogOut } from "lucide-react";
+import { setCurrentUser, logoutCurrentUser } from "@/app/actions";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Owner } from "@/generated/prisma/client";
-import { cn } from "@/lib/utils";
 
 const LABELS: Record<Owner, string> = {
   JAVIER: "Javier",
   ANDY: "Andy",
 };
 
-export function UserSwitcher({ current }: { current: Owner | null }) {
+export function UserSwitcher({ current }: { current: Owner }) {
   const [isPending, startTransition] = useTransition();
 
-  function pick(user: Owner) {
+  function handleLogout() {
     startTransition(() => {
-      setCurrentUser(user);
+      logoutCurrentUser();
     });
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-border bg-muted/40 p-1">
-      {(Object.keys(LABELS) as Owner[]).map((user) => (
-        <Button
-          key={user}
-          type="button"
-          size="sm"
-          variant={current === user ? "default" : "ghost"}
-          disabled={isPending}
-          onClick={() => pick(user)}
-          className={cn(current === user && "shadow-sm")}
-        >
-          {LABELS[user]}
-        </Button>
-      ))}
+    <div className="flex items-center gap-2">
+      <Badge variant="secondary">{LABELS[current]}</Badge>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        disabled={isPending}
+        onClick={handleLogout}
+      >
+        <LogOut /> Switch profile
+      </Button>
     </div>
   );
 }

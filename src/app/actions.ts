@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { pendingSchema, OWNERS, type PendingFormValues } from "@/lib/validation";
-import { setCurrentUserCookie } from "@/lib/current-user";
+import { setCurrentUserCookie, clearCurrentUserCookie } from "@/lib/current-user";
 import type { Owner } from "@/generated/prisma/client";
 
 export type ActionResult = { error: string } | { error?: undefined };
@@ -103,5 +103,10 @@ export async function setCurrentUser(user: string) {
     throw new Error("Unknown user");
   }
   await setCurrentUserCookie(user as Owner);
+  revalidatePath("/");
+}
+
+export async function logoutCurrentUser() {
+  await clearCurrentUserCookie();
   revalidatePath("/");
 }

@@ -21,3 +21,8 @@ export async function setCurrentUserCookie(user: Owner) {
     path: "/",
   });
 }
+
+export async function clearCurrentUserCookie() {
+  const cookieStore = await cookies();
+  cookieStore.delete(COOKIE_NAME);
+}

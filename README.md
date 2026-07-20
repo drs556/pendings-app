@@ -20,7 +20,11 @@ since part of the point of this project was learning how that works.
 
 There's no login system. Identity is a lightweight "who's using this?" picker
 (Javier/Andy) stored in a cookie — appropriate for two people sharing a home
-network, not for anything exposed to the internet.
+network, not for anything exposed to the internet. The board defaults to
+showing only the logged-in profile's own pendings ("Mine" in the filter bar);
+"Everyone" is an explicit, session-only opt-in, not a saved preference — it's
+back to "Mine" after any reload. "Switch profile" in the header clears the
+cookie and returns to the picker.
 
 The UI runs a NERV-terminal (Evangelion) look, with a light/dark toggle in the
 header (`src/components/theme-toggle.tsx`, via `next-themes`). Note: the
