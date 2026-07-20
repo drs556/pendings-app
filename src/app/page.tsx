@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <div className="hazard-stripe h-1.5 w-full" />
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
         <header className="flex items-center justify-between gap-3">
           <div>
             <h1 className="font-heading text-3xl font-bold tracking-widest text-primary uppercase">
