@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Owner {
+  JAVIER
+  ANDY
+}
+
+enum Importance {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Pending {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  topic       String
+  dueDate     DateTime
+  importance  Importance
+  owner       Owner
+  completed   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([owner])
+  @@index([completed])
+}
+
+// Tracks the user-controlled display order of topic sections on the board.
+// Not a foreign key on Pending.topic (which stays a free-typed string) —
+// rows are created lazily the first time a topic name is used.
+model Topic {
+  id    String @id @default(cuid())
+  name  String @unique
+  order Int
+}
